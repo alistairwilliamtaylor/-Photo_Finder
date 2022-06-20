@@ -1,0 +1,39 @@
+label {
+  display: block;
+  font-size: 3vw;
+  margin-block: 20px;
+}
+
+input {
+  font-family: inherit;
+  background-color: inherit;
+  color: inherit;
+  border-color: #61dafb;
+  border-width: 2px;
+  border-radius: 5px;
+  font-size: 2vw;
+  text-align: center;
+}
+
+button {
+  font-family: inherit;
+  font-weight: 300;
+  background-color: #282c34;
+  border-color: #61dafb;
+  border-width: 2px;
+  border-radius: 5px;
+  color: #61dafb;
+  padding: 2vw 2vw;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 2vw;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 20px auto;
+}
+
+button:hover {
+  background-color: #61dafb;
+  color: #282c34;
+}
