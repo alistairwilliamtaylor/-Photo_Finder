@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import "./PhotoGallery.css";
-import "./GalleryImage.css";
-import "./SearchPrompt.css";
 import axios from "axios";
+import SearchPrompt from "./components/SearchPrompt";
+import PhotoGallery from "./components/PhotoGallery";
+import { PhotoInfo } from "./Interfaces"
 
 const NUMBEROFIMAGES = 9;
 
@@ -15,24 +15,12 @@ interface APIPhotoResultsData {
   };
 }
 
-interface PhotoInfo {
-  id: string;
-  altText: string;
-  url: string;
-}
-
 function App() {
-  const [searchKeyword, updateSearchKeyword] = useState("");
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      searchForImages();
-    }
-  };
-
   useEffect(() => {
     getInitialRandomImages();
   }, []);
+
+  const [photos, updatePhotos] = useState<PhotoInfo[]>([]);
 
   const getInitialRandomImages = () => {
     axios
@@ -61,9 +49,7 @@ function App() {
       );
   };
 
-  const [photos, updatePhotos] = useState<PhotoInfo[]>([]);
-
-  const searchForImages = () => {
+  const searchForImages = (searchKeyword: string) => {
     axios
       .get("https://api.unsplash.com/search/photos", {
         params: {
@@ -96,27 +82,8 @@ function App() {
     <div className="App">
       <div className="content-container">
         <h1>{NUMBEROFIMAGES} images</h1>
-        <label htmlFor="image-search-input">show me images of :</label>
-        <input
-          type="text"
-          id="image-search-input"
-          value={searchKeyword}
-          onChange={(e) => updateSearchKeyword(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <button onClick={() => searchForImages()}>go!</button>
-        <section className="photo-gallery">
-          {photos.map((photo) => {
-            return (
-              <img
-                src={photo.url}
-                key={photo.id}
-                alt={photo.altText}
-                className="gallery-image"
-              />
-            );
-          })}
-        </section>
+        <SearchPrompt search={searchForImages} />
+        <PhotoGallery photos={photos}/>
       </div>
     </div>
   );
