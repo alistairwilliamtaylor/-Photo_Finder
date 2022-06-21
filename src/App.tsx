@@ -3,7 +3,7 @@ import "./App.css";
 import axios from "axios";
 import SearchPrompt from "./components/SearchPrompt";
 import PhotoGallery from "./components/PhotoGallery";
-import { PhotoInfo } from "./Interfaces"
+import { PhotoInfo } from "./Interfaces";
 
 const NUMBEROFIMAGES = 9;
 
@@ -21,6 +21,7 @@ function App() {
   }, []);
 
   const [photos, updatePhotos] = useState<PhotoInfo[]>([]);
+  const [hasApiError, updateHasApiError] = useState(false);
 
   const getInitialRandomImages = () => {
     axios
@@ -32,6 +33,7 @@ function App() {
       })
       .then(
         (response) => {
+          updateHasApiError(false);
           const initialPhotos = response.data.map(
             (photoInfo: APIPhotoResultsData) => {
               return {
@@ -44,7 +46,7 @@ function App() {
           updatePhotos(initialPhotos);
         },
         (error) => {
-          console.log(error);
+          updateHasApiError(true);
         }
       );
   };
@@ -60,7 +62,7 @@ function App() {
       })
       .then(
         (response) => {
-          console.log(response);
+          updateHasApiError(false);
           const newPhotos = response.data.results.map(
             (photoInfo: APIPhotoResultsData) => {
               return {
@@ -73,7 +75,7 @@ function App() {
           updatePhotos(newPhotos);
         },
         (error) => {
-          console.log(error);
+          updateHasApiError(true);
         }
       );
   };
@@ -83,7 +85,8 @@ function App() {
       <div className="content-container">
         <h1>{NUMBEROFIMAGES} images</h1>
         <SearchPrompt search={searchForImages} />
-        <PhotoGallery photos={photos}/>
+        {hasApiError && <h3>Oops! Something went wrong</h3>}
+        {hasApiError || <PhotoGallery photos={photos} />}
       </div>
     </div>
   );
