@@ -1,21 +1,27 @@
 import React, { useState } from "react";
-import "./SearchPrompt.css"
+import { NUMBEROFIMAGES } from "../constants";
+import { UnsplashParams } from "../hooks/useUnsplashAPI";
+import "./SearchPrompt.css";
 
 interface SearchPromptProps {
-    search: (searchKeyword: string) => void;
+  getPhotos: (url: string, providedParams: UnsplashParams) => void;
 }
 
-function SearchPrompt({search}: SearchPromptProps) {
+function SearchPrompt({ getPhotos }: SearchPromptProps) {
   const [searchKeyword, updateSearchKeyword] = useState("");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      submitSearch()
+      submitSearch();
     }
   };
 
   const submitSearch = () => {
-    search(searchKeyword);
+    getPhotos("/search/photos", {
+      query: searchKeyword,
+      client_id: process.env.REACT_APP_UNSPLASH_ACCESS_KEY,
+      per_page: NUMBEROFIMAGES,
+    });
     updateSearchKeyword("");
   };
 

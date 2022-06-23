@@ -3,3 +3,7 @@ export interface PhotoInfo {
   altText: string;
   url: string;
 }
+
+export interface ThisStuff {}
+
+export interface OtherStuff {}
