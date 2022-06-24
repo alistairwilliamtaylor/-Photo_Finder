@@ -8,17 +8,9 @@ import "./PhotoGallery.css";
 interface PhotoGalleryProps {
   photos: PhotoInfo[];
   error: boolean;
-  getPhotos: (url: string, providedParams: UnsplashParams) => void;
 }
 
-function PhotoGallery({ photos, error, getPhotos }: PhotoGalleryProps) {
-  useEffect(() => {
-    getPhotos("photos/random", {
-      client_id: process.env.REACT_APP_UNSPLASH_ACCESS_KEY,
-      count: NUMBEROFIMAGES,
-    });
-  }, []);
-
+function PhotoGallery({ photos, error }: PhotoGalleryProps) {
   return (
     <section className="photo-gallery">
       {error && <h3>ooops... something went wrong</h3>}

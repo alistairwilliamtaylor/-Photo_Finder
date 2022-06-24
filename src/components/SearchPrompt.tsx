@@ -1,14 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { NUMBEROFIMAGES } from "../constants";
 import { UnsplashParams } from "../hooks/useUnsplashAPI";
 import "./SearchPrompt.css";
 
-interface SearchPromptProps {
-  getPhotos: (url: string, providedParams: UnsplashParams) => void;
-}
-
-function SearchPrompt({ getPhotos }: SearchPromptProps) {
+function SearchPrompt() {
   const [searchKeyword, updateSearchKeyword] = useState("");
+  let navigate = useNavigate();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -17,11 +15,7 @@ function SearchPrompt({ getPhotos }: SearchPromptProps) {
   };
 
   const submitSearch = () => {
-    getPhotos("/search/photos", {
-      query: searchKeyword,
-      client_id: process.env.REACT_APP_UNSPLASH_ACCESS_KEY,
-      per_page: NUMBEROFIMAGES,
-    });
+    navigate(`/${searchKeyword}`)
     updateSearchKeyword("");
   };
 

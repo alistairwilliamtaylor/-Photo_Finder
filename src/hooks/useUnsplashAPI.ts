@@ -64,7 +64,7 @@ export type UnsplashParams =
   | UnsplashRandomImagesParams;
 
 interface UnsplashSearchImagesParams {
-  query: string;
+  query: string | undefined;
   client_id: string | undefined;
   per_page: number;
 }
