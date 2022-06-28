@@ -14,7 +14,7 @@ function PhotoGallery({ photos, error }: PhotoGalleryProps) {
   return (
     <section className="photo-gallery">
       {error && <h3>ooops... something went wrong</h3>}
-      {error || photos.map((photo) => <GalleryImage photo={photo} />)}
+      {error || photos.map((photo, index) => <GalleryImage photo={photo} key={index}/>)}
     </section>
   );
 }

@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import { Box, Button, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { NUMBEROFIMAGES } from "../constants";
-import { UnsplashParams } from "../hooks/useUnsplashAPI";
 import "./SearchPrompt.css";
 
 function SearchPrompt() {
-  const [searchKeyword, updateSearchKeyword] = useState("");
+  const [searchKeyword, updateSearchKeyword] = useState(
+    () => localStorage.getItem("searchKeyword") || ""
+  );
+
+  // const [inputError, setInputError] = useState(false);
+
   let navigate = useNavigate();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -14,22 +18,33 @@ function SearchPrompt() {
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem("searchKeyword", searchKeyword);
+  }, [searchKeyword]);
+
   const submitSearch = () => {
-    navigate(`/${searchKeyword}`)
+    navigate(`/${searchKeyword}`);
     updateSearchKeyword("");
   };
 
   return (
     <>
-      <label htmlFor="image-search-input">show me images of :</label>
-      <input
-        type="text"
-        id="image-search-input"
+      <TextField
+        id="outlined-basic"
+        // error
+        // helperText="Must be a full word"
+        label="show me images of:"
+        inputProps={{ style: { color: "#61dafb", textAlign: "center" } }}
+        InputLabelProps={{ style: { color: "#61dafb" } }}
         value={searchKeyword}
         onChange={(e) => updateSearchKeyword(e.target.value)}
         onKeyDown={handleKeyDown}
       />
-      <button onClick={submitSearch}>go!</button>
+      <Box textAlign="center" sx={{ p: 2 }}>
+        <Button variant="contained" onClick={submitSearch} color="primary">
+          go!
+        </Button>
+      </Box>
     </>
   );
 }

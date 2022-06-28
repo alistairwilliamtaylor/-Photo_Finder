@@ -1,16 +1,15 @@
 import "./App.css";
 import SearchPrompt from "./components/SearchPrompt";
-import PhotoGallery from "./components/PhotoGallery";
-import { useUnsplashAPI } from "./hooks/useUnsplashAPI";
 import { NUMBEROFIMAGES } from "./constants";
 import { Outlet } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 function App() {
 
   return (
     <div className="App">
       <div className="content-container">
-        <h1>{NUMBEROFIMAGES} images</h1>
+        <Typography variant="h1" gutterBottom component="div">{NUMBEROFIMAGES} Images</Typography>
         <SearchPrompt />
         <Outlet />
       </div>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { PhotoInfo } from "../Interfaces";
 
 export function useUnsplashAPI() {
@@ -28,7 +28,9 @@ export function useUnsplashAPI() {
       );
   }
 
-  return { error, photos, getPhotos };
+  const memoizedGetPhotos = useCallback(getPhotos, [])
+
+  return { error, photos, memoizedGetPhotos };
 }
 
 function flattenPhotoInfo(photoData: APIPhotoData): PhotoInfo {
