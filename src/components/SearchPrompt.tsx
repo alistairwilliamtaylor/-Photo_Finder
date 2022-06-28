@@ -8,20 +8,31 @@ function SearchPrompt() {
     () => localStorage.getItem("searchKeyword") || ""
   );
 
-  // const [inputError, setInputError] = useState(false);
-
-  let navigate = useNavigate();
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      submitSearch();
-    }
-  };
-
   useEffect(() => {
     localStorage.setItem("searchKeyword", searchKeyword);
   }, [searchKeyword]);
 
+  
+  const [inputError, setInputError] = useState(false);
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearchSubmit();
+    }
+  };
+  
+  const handleButtonClick = () => handleSearchSubmit()
+  
+  const handleSearchSubmit = () => {
+    const hasInputError = validateInput();
+    setInputError(hasInputError);
+    hasInputError || submitSearch();
+  };
+  
+  const validateInput = () => !/^[a-zA-Z\s]+$/.test(searchKeyword);
+  
+  let navigate = useNavigate();
+  
   const submitSearch = () => {
     navigate(`/${searchKeyword}`);
     updateSearchKeyword("");
@@ -31,8 +42,8 @@ function SearchPrompt() {
     <>
       <TextField
         id="outlined-basic"
-        // error
-        // helperText="Must be a full word"
+        error={inputError}
+        helperText={inputError ? "No special characters allowed" : ""}
         label="show me images of:"
         inputProps={{ style: { color: "#61dafb", textAlign: "center" } }}
         InputLabelProps={{ style: { color: "#61dafb" } }}
@@ -41,7 +52,7 @@ function SearchPrompt() {
         onKeyDown={handleKeyDown}
       />
       <Box textAlign="center" sx={{ p: 2 }}>
-        <Button variant="contained" onClick={submitSearch} color="primary">
+        <Button variant="contained" onClick={handleButtonClick} color="primary">
           go!
         </Button>
       </Box>
