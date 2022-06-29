@@ -13,6 +13,7 @@ interface PhotoGalleryProps {
 function PhotoGallery({ photos, error }: PhotoGalleryProps) {
   return (
     <section className="photo-gallery">
+      <h1>hello something went wrong</h1>
       {error && <h3>ooops... something went wrong</h3>}
       {error || photos.map((photo, index) => <GalleryImage photo={photo} key={index}/>)}
     </section>
