@@ -1,10 +1,6 @@
 import { rest } from "msw";
 
 const handlers = [
-    // rest.get("https://api.unsplash.com/search/photos", (req, res, ctx) => {
-    //         return res(
-    //           ctx.status(400))
-    //         })
   rest.get("https://api.unsplash.com/search/photos", (req, res, ctx) => {
     return res(
       ctx.status(200),

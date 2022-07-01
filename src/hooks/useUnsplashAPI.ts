@@ -6,31 +6,32 @@ export function useUnsplashAPI() {
   const [error, setError] = useState(false);
   const [photos, setPhotos] = useState<PhotoInfo[]>([]);
 
-  function getPhotos(url: string, providedParams: UnsplashParams) {
-    axios
-      .get(`https://api.unsplash.com/${url}`, {
-        params: providedParams,
-      })
-      .then(
-        (response) => {
-          setError(false);
-          let newPhotos: PhotoInfo[];
-          if (isAPIDataInResultsObject(response.data)) {
-            newPhotos = response.data.results.map(flattenPhotoInfo);
-          } else {
-            newPhotos = response.data.map(flattenPhotoInfo);
+  const getPhotos = useCallback(
+    (url: string, providedParams: UnsplashParams) => {
+      return axios
+        .get(`https://api.unsplash.com/${url}`, {
+          params: providedParams,
+        })
+        .then(
+          (response) => {
+            setError(false);
+            let newPhotos: PhotoInfo[];
+            if (isAPIDataInResultsObject(response.data)) {
+              newPhotos = response.data.results.map(flattenPhotoInfo);
+            } else {
+              newPhotos = response.data.map(flattenPhotoInfo);
+            }
+            setPhotos(newPhotos);
+          },
+          (error) => {
+            setError(true);
           }
-          setPhotos(newPhotos);
-        },
-        (error) => {
-          setError(true);
-        }
-      );
-  }
+        );
+    },
+    []
+  );
 
-  const memoizedGetPhotos = useCallback(getPhotos, [])
-
-  return { error, photos, memoizedGetPhotos };
+  return { error, photos, getPhotos };
 }
 
 function flattenPhotoInfo(photoData: APIPhotoData): PhotoInfo {

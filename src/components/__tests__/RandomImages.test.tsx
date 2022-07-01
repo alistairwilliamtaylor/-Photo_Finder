@@ -1,16 +1,15 @@
-import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { setupServer } from "msw/node";
-import { handlers, rest } from "./mocks/handlers";
-import RandomImages from "./components/RandomImages";
+import { rest } from "msw";
+import RandomImages from "../RandomImages";
 
-const server = setupServer(...handlers);
+const server = setupServer();
 
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 afterEach(() => server.resetHandlers());
 
-test("renders images when API call is mocked", async () => {
+test("renders image when API call succeeds", async () => {
   server.use(
     rest.get("https://api.unsplash.com/photos/random", (req, res, ctx) => {
       return res(
@@ -32,10 +31,8 @@ test("renders images when API call is mocked", async () => {
   );
 
   render(<RandomImages />);
-  await waitFor(() => expect(screen.getByAltText(/brown/i)).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByAltText(/brown and black cat/i)).toBeInTheDocument());
 });
-// ahhh this took a little while to figure out - I forgot that I'd have to use await to wait for the response
-// so spent a bit of time headscratching wondering why nothing was showing up at all on dom - neither error nor response
 
 test("renders error message when API call for images fails", async () => {
   server.use(
